@@ -1,9 +1,16 @@
 const express = require("express");
 const cartController = require("./controllers/cartController");
 const inventoryController = require("./controllers/inventoryController");
+const cartService = require("./services/cartService");
+const SeedData = require("./seedData/seedData");
 
 const app = express();
 app.use(express.json());
+
+// Initialize cart service with seed data
+SeedData.cartForUsers.forEach((cart, userId) => {
+  cartService.userCarts.set(userId, cart);
+});
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
