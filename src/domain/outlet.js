@@ -1,4 +1,3 @@
-// Base Outlet class
 class Outlet {
   /**
    * @param {string} name

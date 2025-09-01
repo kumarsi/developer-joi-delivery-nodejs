@@ -5,7 +5,6 @@ const inventoryController = require("./controllers/inventoryController");
 const app = express();
 app.use(express.json());
 
-// Add debugging middleware
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();

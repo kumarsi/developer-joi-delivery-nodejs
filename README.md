@@ -28,32 +28,6 @@ JOI Delivery, launched in 2024, is a hyperlocal delivery app designed to bring f
 As JOI Delivery continues to grow and serve more neighborhoods, we're scaling our platform to handle increasing demand, enhance user experience, and support smarter delivery logistics. They're looking for passionate developers to help us build robust, efficient, and scalable solutions that power everything from order placement to real-time tracking.
 Your expertise will directly impact how quickly and reliably customers receive their essentials—and how smoothly local vendors and delivery partners operate within our ecosystem.
 
-## Project Architecture
-
-The project follows a **Clean Architecture** with clear separation of concerns:
-
-### Core Domain Entities
-
-- **`Cart`** - Shopping cart with products, outlet, and user association
-- **`User`** - User management with cart association
-- **`Product`** - Base product class with common properties
-- **`FoodProduct`** - Extends Product for restaurant items
-- **`GroceryProduct`** - Extends Product for grocery items with inventory management
-- **`Outlet`** - Base class for all store types
-- **`GroceryStore`** - Extends Outlet with inventory management
-- **`Restaurant`** - Extends Outlet with menu management
-
-### Service Layer
-
-- **`CartService`** - Business logic for cart operations (add products, fetch cart)
-- **`ProductService`** - Product management and retrieval by store
-- **`UserService`** - User operations and cart association
-
-### Controller Layer
-
-- **`CartController`** - HTTP request handling for cart operations
-- **`InventoryController`** - Store health and inventory management
-
 ### Data Layer
 
 - **`SeedData`** - Initial data population with factory methods
@@ -88,7 +62,7 @@ Dummy Products for Stores to sell and users to buy from.
 
 ## Requirements
 
-The project requires [Node v14](https://nodejs.org/).
+The project requires [Node v22](https://nodejs.org/).
 
 ## Useful Node commands
 
@@ -134,14 +108,18 @@ Run the application which will be listening on port `8080`. There are two ways t
 
 ## API Endpoints
 
-### Cart Management
+Below is a list of API endpoints with their respective input and output. Please note that the application needs to be running for the following endpoints to work. For more information about how to run the application, please refer to run the application section above.
 
-#### Add Product to Cart
+### Add Product to Cart
 
 ```http
 POST /cart/product
 Content-Type: application/json
+```
 
+Request Body
+
+```json
 {
   "userId": "user101",
   "productId": "product101",
@@ -149,37 +127,85 @@ Content-Type: application/json
 }
 ```
 
-#### View Cart
+Response Body
+
+```json
+{
+  "cart": {
+    "cartId": "cart101",
+    "outlet": null,
+    "products": [
+      {
+        "productId": "product103",
+        "productName": "Crackers",
+        "mrp": 10.5,
+        "sellingPrice": null,
+        "weight": 500,
+        "expiryDate": 0,
+        "threshold": 10,
+        "availableStock": 30,
+        "discount": null,
+        "store": {
+          "name": "Fresh Picks",
+          "description": null,
+          "outletId": "store101",
+          "inventory": []
+        }
+      }
+    ],
+    "user": null
+  },
+  "product": {
+    "productId": "product103",
+    "productName": "Crackers",
+    "mrp": 10.5,
+    "sellingPrice": null,
+    "weight": 500,
+    "expiryDate": 0,
+    "threshold": 10,
+    "availableStock": 30,
+    "discount": null,
+    "store": {
+      "name": "Fresh Picks",
+      "description": null,
+      "outletId": "store101",
+      "inventory": []
+    }
+  },
+  "sellingPrice": null
+}
+```
+
+### View Cart
 
 ```http
 GET /cart/view?userId=user101
 ```
 
+Response Body
+
+```json
+{
+  "cartId": "cart101",
+  "outlet": null,
+  "products": [],
+  "user": null
+}
+```
+
 ### Inventory Health
 
-#### Get Store Inventory Health
-
 ```http
-GET /inventory/health?storeId=store101
+GET /inventory/health?storeid=<storeid>
 ```
 
-### Health Check
+Response Body
 
-```http
-GET /health
+```json lines
+{
+  // to be implemented.
+}
 ```
-
-## Features
-
-- **Smart Search**: Find food and grocery items quickly with intelligent search
-- **Shopping Cart Management**: Add, update, and remove items from your cart with real-time total calculation
-- **Customizable Orders**: Modify quantities, add special instructions, and customize your order
-- **Real-time Tracking**: Track your order from kitchen to doorstep with live updates
-- **Secure Payment Processing**: Multiple payment options with mock gateway integration for testing
-- **Payment History & Refunds**: Complete payment tracking and refund processing capabilities
-- **Delivery Plans**: Choose from standard, express, or free delivery options
-- **Order History**: View past orders and reorder favorites
-- **Customer Feedback**: Rate your experience and provide feedback
 
 ## Technology Stack
 
@@ -188,56 +214,3 @@ GET /health
 - **Testing**: Jest for unit testing
 - **Development**: Nodemon for hot reloading
 - **API**: RESTful API design
-
-## Project Structure
-
-```
-src/
-├── app.js                 # Main application entry point
-├── controllers/           # HTTP request handlers
-│   ├── cartController.js  # Cart operations
-│   └── inventoryController.js # Inventory health
-├── services/              # Business logic layer
-│   ├── cartService.js     # Cart business operations
-│   ├── productService.js  # Product management
-│   └── userService.js     # User management
-├── domain/                # Core business entities
-│   ├── cart.js           # Cart entity
-│   ├── user.js           # User entity
-│   ├── product.js        # Base Product class
-│   ├── foodProduct.js    # Food product entity
-│   ├── groceryProduct.js # Grocery product entity
-│   ├── outlet.js         # Base Outlet class
-│   ├── groceryStore.js   # Grocery store entity
-│   └── restaurant.js     # Restaurant entity
-├── seedData/              # Initial data and factory methods
-│   └── seedData.js       # Seed data and object creation
-```
-
-## Key Implementation Details
-
-### Domain Entities
-
-- **Class-based inheritance** following Java patterns
-- **JSDoc type annotations** for better code documentation
-- **Protected properties** equivalent to Java's protected fields
-
-### Services
-
-- **Plain object pattern** for simplicity and consistency
-- **Static data management** through SeedData class
-- **Business logic separation** from controllers
-
-### Controllers
-
-- **Simple object structure** matching the service pattern
-- **Direct service calls** without complex error handling
-- **Clean HTTP response handling**
-
-## Contributing
-
-This project follows the same development practices as the original JOI Energy project. Please refer to the story wall and ensure all features are properly tested before moving to the "Done" column.
-
-## Note
-
-This project demonstrates proper separation of concerns, inheritance patterns, and clean architecture principles. The implementation follows Java patterns while maintaining JavaScript best practices, making it an excellent learning platform for understanding enterprise-level application architecture.

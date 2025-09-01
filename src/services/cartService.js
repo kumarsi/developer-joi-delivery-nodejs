@@ -1,6 +1,5 @@
 const userService = require("./userService");
 const productService = require("./productService");
-const SeedData = require("../seedData/seedData");
 
 const cartService = {
   userCarts: new Map(),
@@ -30,10 +29,5 @@ const cartService = {
     return this.userCarts.get(user.userId);
   },
 };
-
-// Populate userCarts with seed data
-SeedData.cartForUsers.forEach((cart, userId) => {
-  cartService.userCarts.set(userId, cart);
-});
 
 module.exports = cartService;

@@ -1,4 +1,3 @@
-// User class based on Java User class
 class User {
   /**
    * @param {string} userId
